@@ -2864,8 +2864,8 @@ if (metricsSection) {
   metricsObserver.observe(metricsSection);
 }
 
-/* --- Contact Form Validation --- */
-function submitForm() {
+/* --- Contact Form Validation & Submission --- */
+async function submitForm() {
   const fields = [
     { id: 'nombre',  group: 'group-nombre',  validate: v => v.trim().length >= 2 },
     { id: 'apellido', group: 'group-apellido', validate: v => v.trim().length >= 2 },
@@ -2891,27 +2891,50 @@ function submitForm() {
     }
   });
 
-  if (valid) {
-    /* Simulate form submission — replace with real endpoint */
-    const btn = document.getElementById('submitBtn');
-    btn.textContent = 'Enviando…';
-    btn.disabled = true;
-    btn.style.opacity = '0.7';
+  if (!valid) return;
 
-    setTimeout(() => {
+  const btn = document.getElementById('submitBtn');
+  btn.textContent = 'Enviando…';
+  btn.disabled = true;
+
+  try {
+    const response = await fetch('/.netlify/functions/sendEmail', {
+      method: 'POST',
+      body: JSON.stringify({
+        nombre: document.getElementById('nombre').value,
+        apellido: document.getElementById('apellido').value,
+        cargo: document.getElementById('cargo').value,
+        empresa: document.getElementById('empresa').value,
+        email: document.getElementById('email').value,
+        telefono: document.getElementById('telefono').value,
+        mensaje: document.getElementById('mensaje').value
+      })
+    });
+
+    const data = await response.json();
+
+    if (response.ok && data.success) {
       document.getElementById('formSuccess').style.display = 'block';
       btn.textContent = 'Mensaje enviado ✓';
       btn.style.background = '#276749';
-      /* Reset form after 5s */
+      
       setTimeout(() => {
         document.getElementById('contactForm').querySelectorAll('input, textarea').forEach(el => el.value = '');
         btn.disabled = false;
-        btn.style.opacity = '';
         btn.style.background = '';
-        btn.innerHTML = 'Enviar mensaje <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>';
+        btn.textContent = 'Enviar mensaje';
         document.getElementById('formSuccess').style.display = 'none';
       }, 5000);
-    }, 1200);
+    } else {
+      alert('Error: ' + (data.error || 'No se pudo enviar el mensaje'));
+      btn.disabled = false;
+      btn.textContent = 'Enviar mensaje';
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    alert('Error enviando mensaje: ' + error.message);
+    btn.disabled = false;
+    btn.textContent = 'Enviar mensaje';
   }
 }
 
