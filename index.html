@@ -1685,6 +1685,47 @@ a { text-decoration: none; color: inherit; }
 
 .form__group.has-error .form__error { display: block; }
 
+/* Phone number group with country selector */
+.form__phone-group {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 12px;
+  align-items: flex-end;
+}
+
+.form__phone-group label {
+  grid-column: 1 / -1;
+}
+
+.form__select {
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--dark);
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 12px;
+  width: 100%;
+  transition: border-color var(--transition), box-shadow var(--transition);
+  outline: none;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%236b6b6b' d='M0 0l6 8 6-8z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 32px;
+}
+
+.form__select:focus {
+  border-color: var(--red);
+  box-shadow: 0 0 0 3px rgba(155,27,27,0.1);
+}
+
+.form__select:hover {
+  border-color: var(--gray-300);
+}
+
 .form__submit {
   margin-top: 28px;
   display: flex;
@@ -2656,9 +2697,38 @@ a { text-decoration: none; color: inherit; }
               <span class="form__error">Por favor ingresa un correo electrónico válido.</span>
             </div>
 
-            <div class="form__group" id="group-telefono">
-              <label class="form__label" for="telefono">Número de teléfono</label>
-              <input class="form__input" type="tel" id="telefono" name="telefono" placeholder="+593 99 000 0000" autocomplete="tel">
+            <div class="form__group form__phone-group" id="group-telefono">
+              <label class="form__label">Teléfono</label>
+              <select class="form__select" id="pais" name="pais" autocomplete="off">
+                <option value="593">🇪🇨 +593 (Ecuador)</option>
+                <option value="1">🇺🇸 +1 (USA)</option>
+                <option value="51">🇵🇪 +51 (Perú)</option>
+                <option value="34">🇪🇸 +34 (España)</option>
+                <option value="55">🇧🇷 +55 (Brasil)</option>
+                <option value="57">🇨🇴 +57 (Colombia)</option>
+                <option value="56">🇨🇱 +56 (Chile)</option>
+                <option value="58">🇻🇪 +58 (Venezuela)</option>
+                <option value="505">🇳🇮 +505 (Nicaragua)</option>
+                <option value="502">🇬🇹 +502 (Guatemala)</option>
+                <option value="506">🇨🇷 +506 (Costa Rica)</option>
+                <option value="504">🇭🇳 +504 (Honduras)</option>
+                <option value="503">🇸🇻 +503 (El Salvador)</option>
+                <option value="507">🇵🇦 +507 (Panamá)</option>
+                <option value="54">🇦🇷 +54 (Argentina)</option>
+                <option value="591">🇧🇴 +591 (Bolivia)</option>
+                <option value="595">🇵🇾 +595 (Paraguay)</option>
+                <option value="598">🇺🇾 +598 (Uruguay)</option>
+                <option value="44">🇬🇧 +44 (Reino Unido)</option>
+                <option value="33">🇫🇷 +33 (Francia)</option>
+                <option value="49">🇩🇪 +49 (Alemania)</option>
+                <option value="39">🇮🇹 +39 (Italia)</option>
+                <option value="61">🇦🇺 +61 (Australia)</option>
+                <option value="81">🇯🇵 +81 (Japón)</option>
+                <option value="86">🇨🇳 +86 (China)</option>
+                <option value="91">🇮🇳 +91 (India)</option>
+              </select>
+              <input class="form__input" type="tel" id="telefono" name="telefono" placeholder="99 000 0000" autocomplete="tel" maxlength="20">
+              <span class="form__error">Ingresa un número de teléfono válido.</span>
             </div>
 
             <div class="form__group form__group--full" id="group-mensaje">
@@ -2880,8 +2950,8 @@ function isValidEmail(email) {
 
 function isValidPhone(phone) {
   if (!phone.trim()) return true; // Opcional
-  // Solo números, espacios, +, -, ( )
-  return /^[\d\s+\-()]{7,20}$/.test(phone.trim());
+  // Solo números, sin espacios ni caracteres especiales (el país está por separado)
+  return /^[\d]{7,15}$/.test(phone.trim());
 }
 
 function isValidCompany(company) {
@@ -2982,6 +3052,10 @@ async function submitForm() {
   btn.disabled = true;
 
   try {
+    const telefonoNumero = document.getElementById('telefono').value.trim();
+    const pais = document.getElementById('pais').value;
+    const telefonoCompleto = telefonoNumero ? `+${pais} ${telefonoNumero}` : '';
+
     const response = await fetch('/.netlify/functions/sendEmail', {
       method: 'POST',
       body: JSON.stringify({
@@ -2990,7 +3064,7 @@ async function submitForm() {
         cargo: document.getElementById('cargo').value.trim(),
         empresa: document.getElementById('empresa').value.trim(),
         email: document.getElementById('email').value.trim(),
-        telefono: document.getElementById('telefono').value.trim(),
+        telefono: telefonoCompleto,
         mensaje: document.getElementById('mensaje').value.trim()
       })
     });
