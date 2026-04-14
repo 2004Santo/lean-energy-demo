@@ -2864,15 +2864,90 @@ if (metricsSection) {
   metricsObserver.observe(metricsSection);
 }
 
+/* --- Advanced Form Validation --- */
+function isValidName(name) {
+  const trimmed = name.trim();
+  if (trimmed.length < 2 || trimmed.length > 50) return false;
+  // Solo letras, espacios, acentos, guiones y apóstrofes
+  return /^[a-záéíóúñàâäüA-ZÁÉÍÓÚÑÀÂÄÜ\s'-]+$/.test(trimmed);
+}
+
+function isValidEmail(email) {
+  const trimmed = email.trim();
+  // RFC 5322 simplified
+  return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(trimmed) && trimmed.length <= 100;
+}
+
+function isValidPhone(phone) {
+  if (!phone.trim()) return true; // Opcional
+  // Solo números, espacios, +, -, ( )
+  return /^[\d\s+\-()]{7,20}$/.test(phone.trim());
+}
+
+function isValidCompany(company) {
+  const trimmed = company.trim();
+  if (trimmed.length < 2 || trimmed.length > 100) return false;
+  // No permitir solo números o caracteres especiales
+  return /^[a-zA-Z0-9\s\-&.,áéíóúñ]+$/.test(trimmed) && /[a-zA-Z]/.test(trimmed);
+}
+
+function isValidMessage(message) {
+  const trimmed = message.trim();
+  if (trimmed.length < 10 || trimmed.length > 2000) return false;
+  // Detectar spam: demasiados URLs o caracteres repetidos
+  const urlCount = (trimmed.match(/https?:\/\//g) || []).length;
+  if (urlCount > 3) return false;
+  // Detectar repetición excesiva
+  if (/(.)\1{9,}/.test(trimmed)) return false;
+  return true;
+}
+
 /* --- Contact Form Validation & Submission --- */
 async function submitForm() {
   const fields = [
-    { id: 'nombre',  group: 'group-nombre',  validate: v => v.trim().length >= 2 },
-    { id: 'apellido', group: 'group-apellido', validate: v => v.trim().length >= 2 },
-    { id: 'empresa', group: 'group-empresa',  validate: v => v.trim().length >= 2 },
-    { id: 'email',   group: 'group-email',    validate: v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()) },
-    { id: 'mensaje', group: 'group-mensaje',  validate: v => v.trim().length >= 10 },
+    { 
+      id: 'nombre', 
+      group: 'group-nombre', 
+      validate: v => isValidName(v),
+      errorMsg: 'Ingresa un nombre válido (solo letras, 2-50 caracteres)'
+    },
+    { 
+      id: 'apellido', 
+      group: 'group-apellido', 
+      validate: v => isValidName(v),
+      errorMsg: 'Ingresa un apellido válido (solo letras, 2-50 caracteres)'
+    },
+    { 
+      id: 'empresa', 
+      group: 'group-empresa', 
+      validate: v => isValidCompany(v),
+      errorMsg: 'Ingresa un nombre de empresa válido (2-100 caracteres)'
+    },
+    { 
+      id: 'email', 
+      group: 'group-email', 
+      validate: v => isValidEmail(v),
+      errorMsg: 'Ingresa un correo electrónico válido'
+    },
+    { 
+      id: 'mensaje', 
+      group: 'group-mensaje', 
+      validate: v => isValidMessage(v),
+      errorMsg: 'El mensaje debe tener entre 10 y 2000 caracteres'
+    },
   ];
+
+  // Validar teléfono si está presente
+  const telefonoInput = document.getElementById('telefono');
+  if (telefonoInput && telefonoInput.value && !isValidPhone(telefonoInput.value)) {
+    document.getElementById('group-telefono').classList.add('has-error');
+    const errorEl = document.querySelector('#group-telefono .form__error');
+    if (errorEl) {
+      errorEl.textContent = 'Teléfono inválido';
+      errorEl.style.display = 'block';
+    }
+    return;
+  }
 
   let valid = true;
 
@@ -2884,10 +2959,19 @@ async function submitForm() {
     if (!isValid) {
       group.classList.add('has-error');
       input.classList.add('error');
+      const errorEl = group.querySelector('.form__error');
+      if (errorEl) {
+        errorEl.textContent = field.errorMsg;
+        errorEl.style.display = 'block';
+      }
       valid = false;
     } else {
       group.classList.remove('has-error');
       input.classList.remove('error');
+      const errorEl = group.querySelector('.form__error');
+      if (errorEl) {
+        errorEl.style.display = 'none';
+      }
     }
   });
 
@@ -2901,13 +2985,13 @@ async function submitForm() {
     const response = await fetch('/.netlify/functions/sendEmail', {
       method: 'POST',
       body: JSON.stringify({
-        nombre: document.getElementById('nombre').value,
-        apellido: document.getElementById('apellido').value,
-        cargo: document.getElementById('cargo').value,
-        empresa: document.getElementById('empresa').value,
-        email: document.getElementById('email').value,
-        telefono: document.getElementById('telefono').value,
-        mensaje: document.getElementById('mensaje').value
+        nombre: document.getElementById('nombre').value.trim(),
+        apellido: document.getElementById('apellido').value.trim(),
+        cargo: document.getElementById('cargo').value.trim(),
+        empresa: document.getElementById('empresa').value.trim(),
+        email: document.getElementById('email').value.trim(),
+        telefono: document.getElementById('telefono').value.trim(),
+        mensaje: document.getElementById('mensaje').value.trim()
       })
     });
 
