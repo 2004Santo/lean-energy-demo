@@ -491,26 +491,27 @@ a { text-decoration: none; color: inherit; }
   height: 100%;
   position: relative;
   background-image: url('imagenes/industria.png');
-  background-size: cover;
+  background-size: contain;
+  background-repeat: no-repeat;
   background-position: center;
+  background-color: var(--off-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   /* Zoom/parallax feel on hover */
   transition: transform 0.7s cubic-bezier(0.4,0,0.2,1);
   overflow: hidden;
 }
 
 .about__visual:hover .about__image-placeholder {
-  transform: scale(1.04);
+  transform: scale(1.02);
 }
 
 .about__image-placeholder::after {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    180deg,
-    rgba(10,10,10,0.30) 0%,
-    rgba(10,10,10,0.50) 100%
-  );
+  background: transparent;
   pointer-events: none;
 }
 
