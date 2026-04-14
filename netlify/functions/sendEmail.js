@@ -38,6 +38,7 @@ exports.handler = async (event) => {
         template_id: templateId,
         user_id: publicKey,
         template_params: {
+          to_email: 'info@leanconsult.com.ec',
           nombre,
           apellido,
           cargo: cargo || 'No especificado',
