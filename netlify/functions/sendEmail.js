@@ -52,10 +52,26 @@ exports.handler = async (event) => {
     const responseText = await emailResponse.text();
     let emailData;
     
+    // Si la respuesta es "OK" (éxito), EmailJS lo respondió como texto plano
+    if (responseText === 'OK' || responseText.trim() === 'OK') {
+      return {
+        statusCode: 200,
+        body: JSON.stringify({ success: true, message: 'Email enviado correctamente' })
+      };
+    }
+    
+    // Si no, intentar parsear como JSON
     try {
       emailData = JSON.parse(responseText);
     } catch (e) {
       console.error('Respuesta no-JSON de EmailJS:', responseText);
+      // Si no es JSON ni "OK", pero la respuesta fue exitosa (2xx), considerarlo éxito
+      if (emailResponse.ok) {
+        return {
+          statusCode: 200,
+          body: JSON.stringify({ success: true, message: 'Email enviado correctamente' })
+        };
+      }
       return { 
         statusCode: 500, 
         body: JSON.stringify({ error: 'Error en respuesta de EmailJS' }) 
