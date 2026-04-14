@@ -1,0 +1,2940 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LeanConsult — Consultoría Integral & Ingeniería</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ========================================
+   CSS VARIABLES & RESET
+======================================== */
+:root {
+  --red: #9B1B1B;
+  --red-light: #C0392B;
+  --red-muted: #f5e8e8;
+  --dark: #0f0f0f;
+  --dark-2: #1a1a1a;
+  --gray-900: #1c1c1c;
+  --gray-700: #3d3d3d;
+  --gray-500: #6b6b6b;
+  --gray-300: #b0b0b0;
+  --gray-100: #f4f4f4;
+  --white: #ffffff;
+  --off-white: #fafaf8;
+  --border: #e5e5e5;
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body: 'DM Sans', sans-serif;
+  --section-pad: 120px;
+  --container: 1240px;
+  --radius: 4px;
+  --transition: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; font-size: 16px; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--white);
+  color: var(--dark);
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+
+/* ========================================
+   UTILITIES
+======================================== */
+.container {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 40px;
+}
+
+.section { padding: var(--section-pad) 0; }
+
+.section--dark {
+  background: var(--dark);
+  color: var(--white);
+}
+
+.section--off {
+  background: var(--off-white);
+}
+
+.label {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--red);
+  margin-bottom: 20px;
+}
+
+.label--white { color: rgba(255,255,255,0.55); }
+
+h1, h2, h3, h4 { font-family: var(--font-display); line-height: 1.2; }
+
+h1 { font-size: clamp(2.8rem, 5.5vw, 5rem); font-weight: 700; }
+h2 { font-size: clamp(2rem, 4vw, 3.2rem); font-weight: 600; }
+h3 { font-size: clamp(1.2rem, 2vw, 1.6rem); font-weight: 600; }
+
+p { color: var(--gray-700); line-height: 1.8; }
+
+a { text-decoration: none; color: inherit; }
+
+/* ========================================
+   SCROLL REVEAL — Enhanced
+======================================== */
+.reveal {
+  opacity: 0;
+  transform: translateY(36px);
+  transition: opacity 0.75s cubic-bezier(0.4,0,0.2,1), transform 0.75s cubic-bezier(0.4,0,0.2,1);
+}
+.reveal.visible {
+  opacity: 1;
+  transform: none;
+}
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+.reveal-delay-5 { transition-delay: 0.5s; }
+
+/* ========================================
+   NAVIGATION
+======================================== */
+.nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1000;
+  padding: 18px 0;
+  transition: background var(--transition), padding var(--transition), box-shadow var(--transition);
+}
+
+.nav.scrolled {
+  background: rgba(255,255,255,0.97);
+  padding: 12px 0;
+  box-shadow: 0 1px 0 var(--border);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.nav__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 40px;
+}
+
+/* ── Logo image (navbar) ── */
+.nav__logo {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  line-height: 1;
+  text-decoration: none;
+}
+
+.nav__logo-img {
+  height: 44px;
+  width: auto;
+  max-width: 220px;
+  object-fit: contain;
+  display: block;
+  /* Fallback background keeps layout intact if image is missing */
+}
+
+/* Fallback text logo shown when image is not loaded */
+.nav__logo-fallback {
+  display: none;
+  flex-direction: column;
+  line-height: 1;
+}
+
+.nav__logo-main {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--dark);
+  letter-spacing: -0.01em;
+}
+.nav__logo-main span { color: var(--red); }
+.nav__logo-tag {
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gray-500);
+  font-weight: 500;
+}
+
+.nav__links {
+  display: flex;
+  align-items: center;
+  gap: 36px;
+  list-style: none;
+}
+
+.nav__links a {
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--gray-700);
+  transition: color var(--transition);
+  position: relative;
+}
+
+.nav__links a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px; left: 0;
+  width: 0; height: 2px;
+  background: var(--red);
+  transition: width var(--transition);
+}
+
+.nav__links a:not(.nav__cta):hover::after { width: 100%; }
+.nav__links a:hover { color: var(--red); }
+.nav__links a.active { color: var(--dark); }
+
+.nav__cta {
+  background: var(--red);
+  color: var(--white) !important;
+  padding: 10px 22px;
+  border-radius: var(--radius);
+  font-weight: 600 !important;
+  transition: background var(--transition), transform var(--transition) !important;
+}
+.nav__cta:hover {
+  background: var(--red-light) !important;
+  color: var(--white) !important;
+  transform: translateY(-1px);
+}
+.nav__cta::after { display: none !important; }
+
+/* Mobile hamburger */
+.nav__toggle {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 4px;
+}
+.nav__toggle span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: var(--dark);
+  transition: transform var(--transition), opacity var(--transition);
+}
+
+/* ========================================
+   HERO
+======================================== */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  background: var(--dark);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Hero background image with parallax-ready positioning */
+.hero__bg-image {
+  position: absolute;
+  inset: 0;
+  background-image: url('1776169432632_image.png');
+  background-size: cover;
+  background-position: center 30%;
+  background-attachment: fixed; /* subtle parallax */
+  transform: scale(1.05);
+  transition: transform 0.6s ease;
+}
+
+.hero__bg-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(10,10,10,0.88) 0%,
+    rgba(10,10,10,0.75) 50%,
+    rgba(10,10,10,0.65) 100%
+  );
+}
+
+/* Geometric background lines */
+.hero__bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.hero__bg-line {
+  position: absolute;
+  background: rgba(255,255,255,0.04);
+}
+
+.hero__bg-line:nth-child(1) { width: 1px; height: 100%; left: 20%; top: 0; }
+.hero__bg-line:nth-child(2) { width: 1px; height: 100%; left: 50%; top: 0; }
+.hero__bg-line:nth-child(3) { width: 1px; height: 100%; left: 75%; top: 0; }
+.hero__bg-line:nth-child(4) { width: 100%; height: 1px; top: 50%; left: 0; }
+.hero__bg-line:nth-child(5) { width: 100%; height: 1px; top: 75%; left: 0; }
+
+.hero__accent {
+  position: absolute;
+  right: -200px;
+  top: -100px;
+  width: 700px;
+  height: 700px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(155,27,27,0.18) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.hero__inner {
+  position: relative;
+  z-index: 2;
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 120px 40px 80px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+
+.hero__tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.5);
+  margin-bottom: 32px;
+}
+
+.hero__tag::before {
+  content: '';
+  display: block;
+  width: 28px;
+  height: 1px;
+  background: var(--red);
+}
+
+.hero__headline {
+  color: var(--white);
+  margin-bottom: 28px;
+  font-weight: 700;
+}
+
+.hero__headline em {
+  font-style: normal;
+  color: var(--red);
+}
+
+.hero__sub {
+  font-size: 1.05rem;
+  color: rgba(255,255,255,0.55);
+  max-width: 480px;
+  line-height: 1.8;
+  margin-bottom: 44px;
+}
+
+.hero__actions {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 15px 32px;
+  border-radius: var(--radius);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: all var(--transition);
+  border: none;
+  font-family: var(--font-body);
+}
+
+.btn--primary {
+  background: var(--red);
+  color: var(--white);
+}
+.btn--primary:hover { background: var(--red-light); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(155,27,27,0.4); }
+
+.btn--outline {
+  background: transparent;
+  color: var(--white);
+  border: 1px solid rgba(255,255,255,0.25);
+}
+.btn--outline:hover { border-color: rgba(255,255,255,0.6); background: rgba(255,255,255,0.07); transform: translateY(-1px); }
+
+.hero__stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: rgba(255,255,255,0.08);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.hero__stat {
+  background: rgba(255,255,255,0.03);
+  padding: 32px 24px;
+  text-align: center;
+  transition: background var(--transition);
+  cursor: default;
+}
+.hero__stat:hover { background: rgba(255,255,255,0.07); }
+
+.hero__stat-num {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--white);
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.hero__stat-label {
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.4);
+  font-weight: 500;
+}
+
+/* ========================================
+   ABOUT
+======================================== */
+.about__inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 100px;
+  align-items: center;
+}
+
+.about__visual {
+  position: relative;
+}
+
+.about__year-block {
+  position: absolute;
+  bottom: -20px;
+  right: -20px;
+  background: var(--red);
+  color: var(--white);
+  padding: 28px 32px;
+  text-align: center;
+  border-radius: var(--radius);
+  z-index: 3;
+  box-shadow: 0 12px 40px rgba(155,27,27,0.35);
+}
+
+.about__year-num {
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  font-weight: 700;
+  line-height: 1;
+  display: block;
+}
+
+.about__year-text {
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  opacity: 0.8;
+  margin-top: 6px;
+  display: block;
+}
+
+/* ── About image with background image ── */
+.about__image-wrap {
+  aspect-ratio: 4/5;
+  border-radius: var(--radius);
+  overflow: hidden;
+  position: relative;
+}
+
+.about__image-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/*
+  "2014 Founded" background image block
+  Uses the industrial worker image with a dark overlay for readability
+*/
+.about__image-placeholder {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  background-image: url('imagenes/industria.png');
+  background-size: cover;
+  background-position: center;
+  /* Zoom/parallax feel on hover */
+  transition: transform 0.7s cubic-bezier(0.4,0,0.2,1);
+  overflow: hidden;
+}
+
+.about__visual:hover .about__image-placeholder {
+  transform: scale(1.04);
+}
+
+.about__image-placeholder::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(10,10,10,0.30) 0%,
+    rgba(10,10,10,0.50) 100%
+  );
+  pointer-events: none;
+}
+
+.about__content { }
+
+.about__text {
+  font-size: 1.05rem;
+  margin-bottom: 24px;
+  color: var(--gray-700);
+  line-height: 1.85;
+}
+
+.about__values {
+  margin-top: 40px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.about__value {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  transition: transform var(--transition);
+}
+
+.about__value:hover { transform: translateX(4px); }
+
+.about__value-icon {
+  width: 36px;
+  height: 36px;
+  background: var(--red-muted);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 2px;
+  transition: background var(--transition), transform var(--transition);
+}
+
+.about__value:hover .about__value-icon {
+  background: var(--red);
+  transform: scale(1.1);
+}
+
+.about__value:hover .about__value-icon svg { stroke: var(--white); }
+
+.about__value-icon svg {
+  width: 16px;
+  height: 16px;
+  stroke: var(--red);
+  fill: none;
+  stroke-width: 1.5;
+  transition: stroke var(--transition);
+}
+
+.about__value-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--dark);
+  margin-bottom: 4px;
+}
+
+.about__value-desc {
+  font-size: 12px;
+  color: var(--gray-500);
+  line-height: 1.5;
+}
+
+/* ========================================
+   PILLARS
+======================================== */
+.pillars { padding: var(--section-pad) 0; background: var(--dark); }
+
+.pillars__header {
+  text-align: center;
+  margin-bottom: 64px;
+}
+
+.pillars__header h2 { color: var(--white); }
+
+.pillars__subtitle {
+  color: rgba(255,255,255,0.45);
+  max-width: 520px;
+  margin: 16px auto 0;
+  font-size: 1rem;
+}
+
+.pillars__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: rgba(255,255,255,0.08);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.pillar {
+  background: rgba(255,255,255,0.02);
+  padding: 48px 32px;
+  position: relative;
+  cursor: default;
+  transition: background var(--transition);
+  overflow: hidden;
+}
+
+.pillar::before {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0;
+  width: 100%; height: 3px;
+  background: var(--red);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--transition);
+}
+
+.pillar:hover { background: rgba(255,255,255,0.05); }
+.pillar:hover::before { transform: scaleX(1); }
+
+.pillar--energy {
+  background: rgba(155,27,27,0.12);
+}
+.pillar--energy::before { transform: scaleX(1); }
+
+.pillar__icon {
+  width: 52px;
+  height: 52px;
+  margin-bottom: 28px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform var(--transition), background var(--transition);
+}
+
+.pillar:hover .pillar__icon { transform: scale(1.08); background: rgba(255,255,255,0.1); }
+
+.pillar--energy .pillar__icon {
+  background: rgba(155,27,27,0.3);
+}
+
+.pillar__icon svg {
+  width: 24px;
+  height: 24px;
+  stroke: rgba(255,255,255,0.7);
+  fill: none;
+}
+
+.pillar--energy .pillar__icon svg { stroke: #ff9999; }
+
+.pillar__num {
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: rgba(255,255,255,0.2);
+  font-weight: 600;
+  margin-bottom: 14px;
+}
+
+.pillar__title {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--white);
+  margin-bottom: 16px;
+  line-height: 1.25;
+}
+
+.pillar--energy .pillar__title { color: #ffd0d0; }
+
+.pillar__desc {
+  font-size: 13px;
+  color: rgba(255,255,255,0.45);
+  line-height: 1.7;
+}
+
+.pillar__tag {
+  display: inline-block;
+  margin-top: 20px;
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--red);
+  background: rgba(155,27,27,0.2);
+  padding: 4px 10px;
+  border-radius: 2px;
+  font-weight: 600;
+}
+
+/* ========================================
+   SERVICES (LEAN CONSULT)
+======================================== */
+.services__header {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  margin-bottom: 72px;
+  align-items: end;
+}
+
+.services__intro p {
+  font-size: 1.05rem;
+  line-height: 1.85;
+  color: var(--gray-700);
+  margin-top: 12px;
+}
+
+.services__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.service-card {
+  background: var(--white);
+  padding: 36px 32px;
+  position: relative;
+  transition: background var(--transition), box-shadow var(--transition), transform var(--transition);
+  cursor: default;
+  overflow: hidden;
+}
+
+.service-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0;
+  width: 0; height: 2px;
+  background: var(--red);
+  transition: width 0.45s ease;
+}
+
+.service-card:hover {
+  background: var(--off-white);
+  box-shadow: inset 0 0 0 1px rgba(155,27,27,0.12);
+}
+.service-card:hover::after { width: 100%; }
+
+.service-card__icon {
+  width: 44px;
+  height: 44px;
+  background: var(--red-muted);
+  border-radius: var(--radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  transition: background var(--transition), transform var(--transition);
+}
+.service-card:hover .service-card__icon {
+  background: var(--red);
+  transform: scale(1.05);
+}
+.service-card:hover .service-card__icon svg { stroke: var(--white); }
+
+.service-card__icon svg {
+  width: 20px; height: 20px;
+  stroke: var(--red);
+  fill: none;
+  stroke-width: 1.5;
+  transition: stroke var(--transition);
+}
+
+.service-card__title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--dark);
+  margin-bottom: 10px;
+  font-family: var(--font-display);
+}
+
+.service-card__desc {
+  font-size: 13px;
+  color: var(--gray-500);
+  line-height: 1.65;
+}
+
+.service-card__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 16px;
+}
+
+.tag {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  background: var(--gray-100);
+  color: var(--gray-700);
+  padding: 3px 8px;
+  border-radius: 2px;
+}
+
+/* ========================================
+   LEAN ENERGY SECTION
+======================================== */
+.energy {
+  background: var(--dark);
+  padding: var(--section-pad) 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.energy__bg-text {
+  position: absolute;
+  bottom: -60px;
+  right: -20px;
+  font-family: var(--font-display);
+  font-size: 220px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.02);
+  line-height: 1;
+  pointer-events: none;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.energy__inner {
+  position: relative;
+  z-index: 2;
+}
+
+.energy__header {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: start;
+  margin-bottom: 72px;
+}
+
+.energy__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(155,27,27,0.25);
+  border: 1px solid rgba(155,27,27,0.4);
+  color: #ff9999;
+  padding: 6px 14px;
+  border-radius: 40px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+
+.energy__badge::before {
+  content: '';
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--red);
+  animation: pulse-dot 2s infinite;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(1.4); }
+}
+
+.energy__headline { color: var(--white); }
+.energy__headline span { color: var(--red); }
+
+.energy__intro {
+  color: rgba(255,255,255,0.5);
+  font-size: 1.02rem;
+  line-height: 1.85;
+  margin-top: 12px;
+}
+
+.energy__note {
+  background: rgba(255,255,255,0.04);
+  border-left: 3px solid var(--red);
+  padding: 24px 28px;
+  border-radius: 0 var(--radius) var(--radius) 0;
+  color: rgba(255,255,255,0.55);
+  font-size: 0.92rem;
+  line-height: 1.75;
+  font-style: italic;
+  margin-top: 28px;
+}
+
+.energy__right {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.energy__feature {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  padding: 24px 28px;
+  border-radius: var(--radius);
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  transition: background var(--transition), border-color var(--transition), transform var(--transition);
+  cursor: default;
+  margin-bottom: 2px;
+}
+
+.energy__feature:hover {
+  background: rgba(155,27,27,0.1);
+  border-color: rgba(155,27,27,0.3);
+  transform: translateX(4px);
+}
+
+.energy__feature-icon {
+  width: 40px; height: 40px;
+  background: rgba(155,27,27,0.25);
+  border-radius: var(--radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background var(--transition);
+}
+
+.energy__feature:hover .energy__feature-icon { background: rgba(155,27,27,0.4); }
+
+.energy__feature-icon svg {
+  width: 18px; height: 18px;
+  stroke: #ff9999;
+  fill: none;
+  stroke-width: 1.5;
+}
+
+.energy__feature-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.85);
+  margin-bottom: 4px;
+}
+
+.energy__feature-desc {
+  font-size: 12px;
+  color: rgba(255,255,255,0.35);
+  line-height: 1.6;
+}
+
+/* ISO 50001 Highlight */
+.energy__iso {
+  margin-top: 56px;
+  background: linear-gradient(135deg, rgba(155,27,27,0.15) 0%, rgba(155,27,27,0.05) 100%);
+  border: 1px solid rgba(155,27,27,0.25);
+  border-radius: var(--radius);
+  padding: 48px;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 48px;
+  align-items: center;
+}
+
+.energy__iso-badge { text-align: center; }
+
+.energy__iso-circle {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border: 2px solid rgba(155,27,27,0.5);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(155,27,27,0.15);
+}
+
+.energy__iso-circle-label {
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.4);
+}
+
+.energy__iso-circle-num {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--white);
+  line-height: 1;
+}
+
+.energy__iso-content h3 {
+  color: var(--white);
+  margin-bottom: 12px;
+}
+
+.energy__iso-content p {
+  color: rgba(255,255,255,0.5);
+  font-size: 0.95rem;
+  line-height: 1.8;
+}
+
+.energy__iso-steps {
+  display: flex;
+  gap: 16px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.energy__iso-step {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.5);
+}
+
+.energy__iso-step::before {
+  content: '';
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--red);
+  flex-shrink: 0;
+}
+
+/* ========================================
+   BENEFITS
+======================================== */
+.benefits__header {
+  text-align: center;
+  margin-bottom: 64px;
+}
+
+.benefits__header h2 { color: var(--white); }
+
+.benefits__subtitle {
+  color: rgba(255,255,255,0.4);
+  margin: 14px auto 0;
+  max-width: 500px;
+}
+
+.benefits__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.benefit-card {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: var(--radius);
+  padding: 40px 32px;
+  position: relative;
+  overflow: hidden;
+  transition: background var(--transition), border-color var(--transition), transform var(--transition);
+  cursor: default;
+}
+
+.benefit-card::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 3px;
+  background: linear-gradient(90deg, var(--red), transparent);
+}
+
+.benefit-card:hover {
+  background: rgba(255,255,255,0.05);
+  border-color: rgba(255,255,255,0.12);
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+}
+
+.benefit-card__num {
+  font-family: var(--font-display);
+  font-size: 3rem;
+  font-weight: 700;
+  color: rgba(255,255,255,0.06);
+  line-height: 1;
+  position: absolute;
+  top: 20px;
+  right: 24px;
+}
+
+.benefit-card__icon {
+  width: 48px; height: 48px;
+  background: rgba(155,27,27,0.2);
+  border-radius: var(--radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24px;
+  transition: background var(--transition), transform var(--transition);
+}
+
+.benefit-card:hover .benefit-card__icon {
+  background: rgba(155,27,27,0.4);
+  transform: scale(1.08);
+}
+
+.benefit-card__icon svg {
+  width: 22px; height: 22px;
+  stroke: #ff8888;
+  fill: none;
+  stroke-width: 1.5;
+}
+
+.benefit-card__title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--white);
+  margin-bottom: 12px;
+  font-family: var(--font-display);
+}
+
+.benefit-card__desc {
+  font-size: 13px;
+  color: rgba(255,255,255,0.4);
+  line-height: 1.7;
+}
+
+/* ========================================
+   EXPERIENCE / SECTORS
+======================================== */
+.sectors__inner {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 100px;
+  align-items: start;
+}
+
+.sectors__list {
+  margin-top: 36px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.sector-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 20px;
+  background: var(--gray-100);
+  border-radius: var(--radius);
+  transition: background var(--transition), transform var(--transition);
+  cursor: default;
+}
+
+.sector-item:hover { background: var(--red-muted); transform: translateX(4px); }
+
+.sector-item__left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.sector-item__dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--red);
+}
+
+.sector-item__name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--dark);
+}
+
+.sector-item__detail {
+  font-size: 12px;
+  color: var(--gray-500);
+  text-align: right;
+  max-width: 220px;
+}
+
+.sectors__highlight {
+  background: var(--dark);
+  color: var(--white);
+  padding: 48px;
+  border-radius: var(--radius);
+}
+
+.sectors__highlight h3 {
+  color: var(--white);
+  margin-bottom: 16px;
+}
+
+.sectors__highlight p {
+  color: rgba(255,255,255,0.5);
+  font-size: 0.95rem;
+  line-height: 1.8;
+}
+
+.sectors__numbers {
+  margin-top: 36px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: rgba(255,255,255,0.08);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.sectors__num-item {
+  background: rgba(255,255,255,0.03);
+  padding: 28px 20px;
+  text-align: center;
+  transition: background var(--transition);
+}
+.sectors__num-item:hover { background: rgba(255,255,255,0.07); }
+
+.sectors__num-val {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--white);
+  line-height: 1;
+  display: block;
+}
+
+.sectors__num-label {
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.3);
+  margin-top: 6px;
+  display: block;
+}
+
+/* ========================================
+   TESTIMONIALS / RESULTS SECTION
+======================================== */
+.testimonials {
+  padding: var(--section-pad) 0;
+  background: var(--off-white);
+  position: relative;
+  overflow: hidden;
+}
+
+.testimonials::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--red), transparent 60%);
+}
+
+.testimonials__header {
+  text-align: center;
+  margin-bottom: 72px;
+}
+
+.testimonials__header h2 { color: var(--dark); }
+
+.testimonials__subtitle {
+  color: var(--gray-500);
+  margin: 14px auto 0;
+  max-width: 540px;
+  font-size: 1rem;
+  line-height: 1.75;
+}
+
+/* Metrics row */
+.testimonials__metrics {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin-bottom: 64px;
+}
+
+.metric-item {
+  background: var(--white);
+  padding: 36px 24px;
+  text-align: center;
+  transition: background var(--transition), box-shadow var(--transition);
+  cursor: default;
+}
+
+.metric-item:hover {
+  background: var(--dark);
+  box-shadow: inset 0 0 0 2px rgba(155,27,27,0.2);
+}
+
+.metric-item__num {
+  font-family: var(--font-display);
+  font-size: 2.8rem;
+  font-weight: 700;
+  color: var(--red);
+  line-height: 1;
+  display: block;
+  transition: color var(--transition);
+}
+
+.metric-item:hover .metric-item__num { color: var(--white); }
+
+.metric-item__label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gray-500);
+  display: block;
+  margin-top: 8px;
+  transition: color var(--transition);
+}
+
+.metric-item:hover .metric-item__label { color: rgba(255,255,255,0.5); }
+
+/* Result cards */
+.testimonials__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.result-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 36px 32px;
+  position: relative;
+  overflow: hidden;
+  transition: box-shadow var(--transition), transform var(--transition), border-color var(--transition);
+  cursor: default;
+}
+
+.result-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 4px; height: 100%;
+  background: var(--red);
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform 0.4s ease;
+}
+
+.result-card:hover {
+  box-shadow: 0 16px 48px rgba(0,0,0,0.1);
+  transform: translateY(-4px);
+  border-color: rgba(155,27,27,0.15);
+}
+
+.result-card:hover::before { transform: scaleY(1); }
+
+.result-card__sector {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--red);
+  margin-bottom: 12px;
+  display: block;
+}
+
+.result-card__result {
+  font-family: var(--font-display);
+  font-size: 1.9rem;
+  font-weight: 700;
+  color: var(--dark);
+  line-height: 1.1;
+  margin-bottom: 12px;
+}
+
+.result-card__company {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--gray-700);
+  margin-bottom: 10px;
+}
+
+.result-card__desc {
+  font-size: 13px;
+  color: var(--gray-500);
+  line-height: 1.65;
+}
+
+.result-card__tag {
+  display: inline-block;
+  margin-top: 20px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  background: var(--red-muted);
+  color: var(--red);
+  padding: 4px 10px;
+  border-radius: 2px;
+  text-transform: uppercase;
+}
+
+/* ========================================
+   CTA SECTION
+======================================== */
+.cta {
+  background: var(--red);
+  padding: 100px 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.cta__bg-circle {
+  position: absolute;
+  right: -100px;
+  top: -150px;
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.12);
+  pointer-events: none;
+}
+
+.cta__bg-circle-2 {
+  position: absolute;
+  left: -80px;
+  bottom: -120px;
+  width: 350px;
+  height: 350px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.08);
+  pointer-events: none;
+}
+
+.cta__inner {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+
+.cta__label {
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.55);
+  font-weight: 600;
+  margin-bottom: 20px;
+  display: block;
+}
+
+.cta__headline {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 700;
+  color: var(--white);
+  line-height: 1.15;
+  margin-bottom: 20px;
+}
+
+.cta__sub {
+  color: rgba(255,255,255,0.65);
+  font-size: 1rem;
+  line-height: 1.75;
+}
+
+.cta__contacts {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.contact-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.15);
+  padding: 20px 24px;
+  border-radius: var(--radius);
+  transition: background var(--transition), border-color var(--transition), transform var(--transition);
+}
+
+.contact-item:hover {
+  background: rgba(255,255,255,0.15);
+  border-color: rgba(255,255,255,0.3);
+  transform: translateX(4px);
+}
+
+.contact-item__icon {
+  width: 40px; height: 40px;
+  background: rgba(255,255,255,0.15);
+  border-radius: var(--radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.contact-item__icon svg {
+  width: 18px; height: 18px;
+  stroke: var(--white);
+  fill: none;
+  stroke-width: 1.5;
+}
+
+.contact-item__label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.5);
+  display: block;
+  margin-bottom: 3px;
+}
+
+.contact-item__value {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--white);
+}
+
+/* ========================================
+   CONTACT FORM SECTION
+======================================== */
+.contact-form-section {
+  padding: var(--section-pad) 0;
+  background: var(--white);
+  position: relative;
+  overflow: hidden;
+}
+
+.contact-form-section::before {
+  content: 'CONTÁCTANOS';
+  position: absolute;
+  right: -60px;
+  top: 40px;
+  font-family: var(--font-display);
+  font-size: 120px;
+  font-weight: 700;
+  color: rgba(0,0,0,0.025);
+  letter-spacing: 0.05em;
+  pointer-events: none;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.contact-form__inner {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap: 100px;
+  align-items: start;
+}
+
+.contact-form__info { }
+
+.contact-form__info h2 {
+  margin-bottom: 20px;
+  line-height: 1.15;
+}
+
+.contact-form__info p {
+  font-size: 1rem;
+  line-height: 1.8;
+  color: var(--gray-500);
+  margin-bottom: 40px;
+}
+
+.contact-form__info-items {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.contact-form__info-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 14px;
+  color: var(--gray-700);
+  font-weight: 500;
+}
+
+.contact-form__info-icon {
+  width: 38px; height: 38px;
+  background: var(--red-muted);
+  border-radius: var(--radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.contact-form__info-icon svg {
+  width: 16px; height: 16px;
+  stroke: var(--red);
+  fill: none;
+  stroke-width: 1.5;
+}
+
+/* Form styles */
+.form {
+  background: var(--off-white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 48px;
+}
+
+.form__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.form__group {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.form__group--full { grid-column: 1 / -1; }
+
+.form__label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gray-700);
+}
+
+.form__label .required {
+  color: var(--red);
+  margin-left: 2px;
+}
+
+.form__input,
+.form__textarea {
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--dark);
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  width: 100%;
+  transition: border-color var(--transition), box-shadow var(--transition);
+  outline: none;
+  -webkit-appearance: none;
+}
+
+.form__input:focus,
+.form__textarea:focus {
+  border-color: var(--red);
+  box-shadow: 0 0 0 3px rgba(155,27,27,0.1);
+}
+
+.form__input:hover,
+.form__textarea:hover {
+  border-color: var(--gray-300);
+}
+
+.form__input.error,
+.form__textarea.error {
+  border-color: #e53e3e;
+  box-shadow: 0 0 0 3px rgba(229,62,62,0.1);
+}
+
+.form__textarea {
+  min-height: 130px;
+  resize: vertical;
+}
+
+.form__error {
+  font-size: 11px;
+  color: #e53e3e;
+  font-weight: 500;
+  display: none;
+}
+
+.form__group.has-error .form__error { display: block; }
+
+.form__submit {
+  margin-top: 28px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 16px;
+}
+
+.form__success {
+  display: none;
+  font-size: 13px;
+  color: #276749;
+  font-weight: 500;
+  background: #f0fff4;
+  border: 1px solid #9ae6b4;
+  padding: 10px 16px;
+  border-radius: var(--radius);
+}
+
+.btn--form {
+  background: var(--red);
+  color: var(--white);
+  padding: 15px 36px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  border-radius: var(--radius);
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-body);
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  transition: background var(--transition), transform var(--transition), box-shadow var(--transition);
+}
+
+.btn--form:hover {
+  background: var(--red-light);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(155,27,27,0.35);
+}
+
+.btn--form:active { transform: translateY(0); }
+
+.btn--form svg {
+  width: 16px; height: 16px;
+  transition: transform var(--transition);
+}
+
+.btn--form:hover svg { transform: translateX(3px); }
+
+/* ========================================
+   FOOTER
+======================================== */
+.footer {
+  background: var(--dark-2);
+  padding: 60px 0 30px;
+}
+
+.footer__inner {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 60px;
+  padding-bottom: 40px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  margin-bottom: 30px;
+}
+
+.footer__brand { }
+
+/* Footer logo image */
+.footer__logo-img {
+  height: 40px;
+  width: auto;
+  max-width: 200px;
+  object-fit: contain;
+  display: block;
+  /* apply brightness filter to lighten on dark bg if needed */
+  filter: brightness(0) invert(1);
+  opacity: 0.85;
+  margin-bottom: 12px;
+  transition: opacity var(--transition);
+}
+
+.footer__logo-img:hover { opacity: 1; }
+
+/* Fallback text logo in footer */
+.footer__logo-text {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--white);
+  letter-spacing: -0.01em;
+  margin-bottom: 6px;
+}
+
+.footer__logo-text span { color: var(--red); }
+
+.footer__tagline {
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.3);
+  margin-bottom: 16px;
+}
+
+.footer__desc {
+  font-size: 13px;
+  color: rgba(255,255,255,0.35);
+  line-height: 1.75;
+  max-width: 280px;
+}
+
+.footer__col-title {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.4);
+  margin-bottom: 20px;
+}
+
+.footer__links {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.footer__links a {
+  font-size: 13px;
+  color: rgba(255,255,255,0.45);
+  transition: color var(--transition), transform var(--transition);
+  display: inline-block;
+}
+
+.footer__links a:hover { color: var(--white); transform: translateX(3px); }
+
+.footer__bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.footer__copy {
+  font-size: 12px;
+  color: rgba(255,255,255,0.2);
+}
+
+.footer__copy span { color: var(--red); }
+
+/* ========================================
+   RESPONSIVE
+======================================== */
+@media (max-width: 1100px) {
+  .pillars__grid { grid-template-columns: repeat(2, 1fr); }
+  .benefits__grid { grid-template-columns: repeat(2, 1fr); }
+  .testimonials__metrics { grid-template-columns: repeat(2, 1fr); }
+  .testimonials__grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 900px) {
+  :root { --section-pad: 80px; }
+
+  .nav__links { display: none; }
+  .nav__links.open {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: var(--white);
+    align-items: center;
+    justify-content: center;
+    gap: 32px;
+    z-index: 999;
+  }
+  .nav__links.open a { font-size: 1.2rem; color: var(--dark); }
+  .nav__toggle { display: flex; z-index: 1001; }
+
+  .hero__inner { grid-template-columns: 1fr; gap: 48px; }
+  .hero__stats { grid-template-columns: repeat(3, 1fr); }
+  .hero__bg-image { background-attachment: scroll; }
+
+  .about__inner { grid-template-columns: 1fr; gap: 48px; }
+  .about__visual { display: none; }
+
+  .services__header { grid-template-columns: 1fr; gap: 24px; }
+  .services__grid { grid-template-columns: 1fr 1fr; }
+
+  .energy__header { grid-template-columns: 1fr; gap: 40px; }
+  .energy__iso { grid-template-columns: 1fr; gap: 24px; }
+
+  .sectors__inner { grid-template-columns: 1fr; gap: 48px; }
+
+  .cta__inner { grid-template-columns: 1fr; gap: 48px; }
+
+  .contact-form__inner { grid-template-columns: 1fr; gap: 48px; }
+  .form { padding: 32px; }
+
+  .footer__inner { grid-template-columns: 1fr 1fr; gap: 40px; }
+}
+
+@media (max-width: 620px) {
+  .container { padding: 0 20px; }
+  .pillars__grid { grid-template-columns: 1fr; }
+  .services__grid { grid-template-columns: 1fr; }
+  .benefits__grid { grid-template-columns: 1fr; }
+  .footer__inner { grid-template-columns: 1fr; }
+  .hero__stats { grid-template-columns: 1fr; }
+  .about__values { grid-template-columns: 1fr; }
+  .testimonials__metrics { grid-template-columns: 1fr 1fr; }
+  .testimonials__grid { grid-template-columns: 1fr; }
+  .form__grid { grid-template-columns: 1fr; }
+  .form__group--full { grid-column: 1; }
+  .contact-form-section::before { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- ========================================
+     NAVIGATION
+======================================== -->
+<nav class="nav" id="nav">
+  <div class="nav__inner">
+
+    <!-- Logo: imagen real (Image 1 suministrada) -->
+    <a href="#" class="nav__logo">
+      <img
+        src="1776169308226_image.png"
+        alt="LeanConsult — + Valor Agregado"
+        class="nav__logo-img"
+        onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+      />
+      <!-- Fallback si la imagen no carga -->
+      <div class="nav__logo-fallback">
+        <span class="nav__logo-main">Lean<span>Consult</span></span>
+        <span class="nav__logo-tag">+ Valor Agregado</span>
+      </div>
+    </a>
+
+    <ul class="nav__links" id="navLinks">
+      <li><a href="#about">Nosotros</a></li>
+      <li><a href="#services">Servicios</a></li>
+      <li><a href="#energy">Lean Energy</a></li>
+      <li><a href="#sectors">Experiencia</a></li>
+      <li><a href="#testimonials">Resultados</a></li>
+      <li><a href="#contacto" class="nav__cta">Trabajemos juntos</a></li>
+    </ul>
+
+    <button class="nav__toggle" id="navToggle" aria-label="Abrir menú">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- ========================================
+     HERO
+======================================== -->
+<section class="hero" id="home">
+  <!-- Background image layer (Image 2: industrial worker) -->
+  <div class="hero__bg-image"></div>
+  <div class="hero__bg-overlay"></div>
+
+  <!-- Decorative grid lines on top -->
+  <div class="hero__bg">
+    <div class="hero__bg-line"></div>
+    <div class="hero__bg-line"></div>
+    <div class="hero__bg-line"></div>
+    <div class="hero__bg-line"></div>
+    <div class="hero__bg-line"></div>
+  </div>
+  <div class="hero__accent"></div>
+
+  <div class="hero__inner">
+    <div class="hero__content reveal">
+      <div class="hero__tag">Consultoría Integral &amp; Ingeniería</div>
+      <h1 class="hero__headline">
+        Convierte tus<br>
+        operaciones en una<br>
+        <em>ventaja competitiva</em>
+      </h1>
+      <p class="hero__sub">
+        Consultoría estratégica, sistemas de gestión y optimización de procesos diseñados para organizaciones que exigen resultados medibles y sostenibles.
+      </p>
+      <div class="hero__actions">
+        <a href="#contacto" class="btn btn--primary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          Trabajemos juntos
+        </a>
+        <a href="#services" class="btn btn--outline">Ver servicios</a>
+      </div>
+    </div>
+
+    <div class="hero__stats reveal reveal-delay-2">
+      <div class="hero__stat">
+        <span class="hero__stat-num">10+</span>
+        <span class="hero__stat-label">Años de experiencia</span>
+      </div>
+      <div class="hero__stat">
+        <span class="hero__stat-num">20+</span>
+        <span class="hero__stat-label">Empresas certificadas</span>
+      </div>
+      <div class="hero__stat">
+        <span class="hero__stat-num">5+</span>
+        <span class="hero__stat-label">Sectores atendidos</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========================================
+     ABOUT
+======================================== -->
+<section class="section" id="about">
+  <div class="container">
+    <div class="about__inner">
+
+      <!-- Visual: background image con overlay y tarjeta "2014 Fundada" -->
+      <div class="about__visual reveal">
+        <div class="about__image-wrap">
+          <!-- Usa Image 2 (industrial) como fondo corporativo -->
+          <div class="about__image-placeholder">
+            <!-- La imagen se aplica vía CSS background-image -->
+          </div>
+        </div>
+        <!-- Tarjeta "2014 Fundada" — permanece sobre la imagen -->
+        <div class="about__year-block">
+          <span class="about__year-num">2014</span>
+          <span class="about__year-text">Fundada</span>
+        </div>
+      </div>
+
+      <div class="about__content">
+        <span class="label reveal">Quiénes somos</span>
+        <h2 class="reveal reveal-delay-1">Soluciones integrales para organizaciones de alto rendimiento</h2>
+        <p class="about__text reveal reveal-delay-2">
+          LeanConsult Cía. Ltda. fue fundada en 2014 como una firma de consultoría e ingeniería dedicada a entregar soluciones integrales bajo una filosofía de innovación continua. Nuestra misión es elevar el desempeño de cada organización que confía en nosotros sus retos más importantes.
+        </p>
+        <p class="about__text reveal reveal-delay-3">
+          Operamos a través de cuatro áreas de práctica especializadas que trabajan de forma interdisciplinaria, respaldadas por profesionales altamente calificados, herramientas técnicas avanzadas y una metodología propia perfeccionada durante más de una década de experiencia en campo.
+        </p>
+
+        <div class="about__values">
+          <div class="about__value reveal reveal-delay-1">
+            <div class="about__value-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/></svg>
+            </div>
+            <div>
+              <div class="about__value-title">Altos Estándares de Calidad</div>
+              <div class="about__value-desc">Soluciones confiables y oportunas que impulsan la rentabilidad del cliente.</div>
+            </div>
+          </div>
+          <div class="about__value reveal reveal-delay-2">
+            <div class="about__value-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+            </div>
+            <div>
+              <div class="about__value-title">Innovación Continua</div>
+              <div class="about__value-desc">Metodología de vanguardia adaptada a cada proyecto y contexto.</div>
+            </div>
+          </div>
+          <div class="about__value reveal reveal-delay-3">
+            <div class="about__value-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+            </div>
+            <div>
+              <div class="about__value-title">Equipo Experto</div>
+              <div class="about__value-desc">Consultores registrados ante el SAE — organismo de acreditación del Ecuador.</div>
+            </div>
+          </div>
+          <div class="about__value reveal reveal-delay-4">
+            <div class="about__value-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+            </div>
+            <div>
+              <div class="about__value-title">Resultados Medibles</div>
+              <div class="about__value-desc">Cada proyecto se define por objetivos claros y verificables desde el primer día.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========================================
+     FOUR PILLARS
+======================================== -->
+<section class="pillars" id="pillars">
+  <div class="container">
+    <div class="pillars__header reveal">
+      <span class="label label--white">Nuestras Áreas de Práctica</span>
+      <h2>Cuatro pilares de especialización</h2>
+      <p class="pillars__subtitle">Especializaciones interdisciplinarias que trabajan en conjunto para lograr una transformación organizacional integral.</p>
+    </div>
+
+    <div class="pillars__grid reveal reveal-delay-1">
+      <div class="pillar">
+        <div class="pillar__num">01</div>
+        <div class="pillar__icon">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <h3 class="pillar__title">Implementación Lean</h3>
+        <p class="pillar__desc">Six Sigma, 5S, TPM — desde el diagnóstico situacional hasta el despliegue total integrado con los sistemas existentes.</p>
+      </div>
+
+      <div class="pillar">
+        <div class="pillar__num">02</div>
+        <div class="pillar__icon">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <h3 class="pillar__title">Sistemas de Gestión</h3>
+        <p class="pillar__desc">ISO 9001, 14001, 45001, 22000, 37001 y más — todo el proceso de certificación, desde análisis de brechas hasta auditoría.</p>
+      </div>
+
+      <div class="pillar">
+        <div class="pillar__num">03</div>
+        <div class="pillar__icon">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <h3 class="pillar__title">Optimización de Procesos</h3>
+        <p class="pillar__desc">Reingeniería de procesos, reducción de desperdicios y eficiencia operativa alineada con la estrategia del negocio.</p>
+      </div>
+
+      <div class="pillar pillar--energy">
+        <div class="pillar__num">04</div>
+        <div class="pillar__icon">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <h3 class="pillar__title">Lean Energy</h3>
+        <p class="pillar__desc">Gestión energética, ISO 50001 y reducción de costos de operación con visibilidad completa del consumo.</p>
+        <span class="pillar__tag">División especializada</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========================================
+     SERVICES (LEAN CONSULT)
+======================================== -->
+<section class="section" id="services">
+  <div class="container">
+    <div class="services__header">
+      <div class="services__intro">
+        <span class="label reveal">Lean Consult — Servicios</span>
+        <h2 class="reveal reveal-delay-1">Consultoría de gestión de alto impacto</h2>
+      </div>
+      <div class="reveal reveal-delay-2">
+        <p>Ofrecemos servicios especializados de consultoría en sistemas de gestión, implementación Lean y normativa técnica para empresas que buscan elevar su desempeño organizacional de forma sostenible.</p>
+      </div>
+    </div>
+
+    <div class="services__grid">
+      <div class="service-card reveal reveal-delay-1">
+        <div class="service-card__icon">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="service-card__title">Certificaciones ISO</div>
+        <p class="service-card__desc">Acompañamiento integral en la implementación y certificación de sistemas de gestión internacionales bajo normas ISO.</p>
+        <div class="service-card__tags">
+          <span class="tag">ISO 9001</span><span class="tag">ISO 14001</span><span class="tag">ISO 45001</span><span class="tag">ISO 22000</span>
+        </div>
+      </div>
+
+      <div class="service-card reveal reveal-delay-2">
+        <div class="service-card__icon">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="service-card__title">Gestión Lean</div>
+        <p class="service-card__desc">Implementación de metodologías Lean Manufacturing, Six Sigma, 5S y TPM para maximizar la eficiencia productiva.</p>
+        <div class="service-card__tags">
+          <span class="tag">Six Sigma</span><span class="tag">5S</span><span class="tag">TPM</span><span class="tag">Kaizen</span>
+        </div>
+      </div>
+
+      <div class="service-card reveal reveal-delay-3">
+        <div class="service-card__icon">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="service-card__title">Optimización de Procesos</div>
+        <p class="service-card__desc">Análisis, rediseño y mejora de procesos operativos y administrativos orientados a reducir desperdicios y aumentar el valor.</p>
+        <div class="service-card__tags">
+          <span class="tag">BPM</span><span class="tag">VSM</span><span class="tag">Reingeniería</span>
+        </div>
+      </div>
+
+      <div class="service-card reveal reveal-delay-1">
+        <div class="service-card__icon">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="service-card__title">Gestión de Riesgos</div>
+        <p class="service-card__desc">Identificación, evaluación y control de riesgos operativos, de calidad, ambientales y de seguridad industrial bajo estándares internacionales.</p>
+        <div class="service-card__tags">
+          <span class="tag">ISO 31000</span><span class="tag">HACCP</span><span class="tag">SST</span>
+        </div>
+      </div>
+
+      <div class="service-card reveal reveal-delay-2">
+        <div class="service-card__icon">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="service-card__title">Seguridad Alimentaria</div>
+        <p class="service-card__desc">Diseño e implementación de sistemas de inocuidad alimentaria bajo ISO 22000, FSSC 22000 y normativa ARCSA para la industria agroalimentaria.</p>
+        <div class="service-card__tags">
+          <span class="tag">ISO 22000</span><span class="tag">FSSC</span><span class="tag">ARCSA</span>
+        </div>
+      </div>
+
+      <div class="service-card reveal reveal-delay-3">
+        <div class="service-card__icon">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="service-card__title">Auditorías &amp; Acreditación</div>
+        <p class="service-card__desc">Auditorías de segunda y tercera parte, acreditación de laboratorios bajo ISO 17025 y supervisión técnica de proyectos financiados.</p>
+        <div class="service-card__tags">
+          <span class="tag">ISO 17025</span><span class="tag">SAE</span><span class="tag">BEDE</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========================================
+     LEAN ENERGY SECTION
+     ⚠️ Sección separada — División distinta de Lean Consult
+======================================== -->
+<section class="energy" id="energy">
+  <div class="energy__bg-text">ENERGY</div>
+
+  <div class="container">
+    <div class="energy__inner">
+
+      <div class="energy__header">
+        <div>
+          <span class="energy__badge">División Especializada</span>
+          <h2 class="energy__headline">Lean <span>Energy</span></h2>
+          <p class="energy__intro">
+            Una división especializada de LeanConsult enfocada exclusivamente en la gestión energética empresarial — reduciendo costos, optimizando el consumo y acompañando a las organizaciones hacia la certificación ISO 50001.
+          </p>
+          <div class="energy__note">
+            Lean Energy opera como una unidad de negocio independiente dentro de LeanConsult, con metodología propia, herramientas especializadas y equipos técnicos dedicados al sector energético.
+          </div>
+        </div>
+
+        <!-- Imagen de la división energética (Image 3: digital world) -->
+        <div class="energy__right reveal reveal-delay-1">
+          <div class="energy__feature">
+            <div class="energy__feature-icon">
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 3v1m0 16v1M3 12h1m16 0h1M5.636 5.636l.707.707m11.314 11.314l.707.707M5.636 18.364l.707-.707m11.314-11.314l.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div>
+              <div class="energy__feature-title">Diagnóstico y Auditoría Energética</div>
+              <div class="energy__feature-desc">Levantamiento del perfil de consumo energético: electricidad, combustibles y agua industrial para identificar oportunidades de ahorro.</div>
+            </div>
+          </div>
+
+          <div class="energy__feature">
+            <div class="energy__feature-icon">
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div>
+              <div class="energy__feature-title">Detección de Errores en Facturación</div>
+              <div class="energy__feature-desc">Revisión continua de facturas y contratos eléctricos para detectar y corregir cobros indebidos por parte de las distribuidoras.</div>
+            </div>
+          </div>
+
+          <div class="energy__feature">
+            <div class="energy__feature-icon">
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div>
+              <div class="energy__feature-title">Sistemas de Monitoreo y Control</div>
+              <div class="energy__feature-desc">Visibilidad completa del consumo por área, línea de producción y equipo crítico para decisiones basadas en datos en tiempo real.</div>
+            </div>
+          </div>
+
+          <div class="energy__feature">
+            <div class="energy__feature-icon">
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div>
+              <div class="energy__feature-title">Nuevos Proyectos Energéticos</div>
+              <div class="energy__feature-desc">Soporte completo en el ciclo de vida del proyecto — desde la evaluación de factibilidad hasta el arranque y puesta en marcha.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ISO 50001 Highlight Block -->
+      <div class="energy__iso reveal">
+        <div class="energy__iso-badge">
+          <div class="energy__iso-circle">
+            <span class="energy__iso-circle-label">ISO</span>
+            <span class="energy__iso-circle-num">50001</span>
+          </div>
+        </div>
+        <div class="energy__iso-content">
+          <h3>Certificación ISO 50001 — Gestión de Energía</h3>
+          <p>Guiamos a tu organización en todo el proceso de certificación ISO 50001 — garantizando el cumplimiento normativo, reduciendo el riesgo operativo y construyendo una cultura de mejora energética continua alineada con estándares internacionales.</p>
+          <div class="energy__iso-steps">
+            <span class="energy__iso-step">Diagnóstico Energético</span>
+            <span class="energy__iso-step">Análisis de Brechas</span>
+            <span class="energy__iso-step">Implementación del Sistema</span>
+            <span class="energy__iso-step">Auditoría Interna</span>
+            <span class="energy__iso-step">Certificación</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ========================================
+     BENEFITS
+======================================== -->
+<section class="section section--dark" id="benefits">
+  <div class="container">
+    <div class="benefits__header reveal">
+      <span class="label label--white">Por qué LeanConsult</span>
+      <h2>Lo que obtienes</h2>
+      <p class="benefits__subtitle">Resultados tangibles — medibles desde el primer día — para organizaciones que eligen operar de forma más inteligente.</p>
+    </div>
+
+    <div class="benefits__grid">
+
+      <div class="benefit-card reveal reveal-delay-1">
+        <span class="benefit-card__num">01</span>
+        <div class="benefit-card__icon">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <h3 class="benefit-card__title">Reducción Real de Costos</h3>
+        <p class="benefit-card__desc">Ahorros medibles en tu presupuesto eléctrico y operativo anual — respaldados por datos y objetivos verificables.</p>
+      </div>
+
+      <div class="benefit-card reveal reveal-delay-2">
+        <span class="benefit-card__num">02</span>
+        <div class="benefit-card__icon">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <h3 class="benefit-card__title">Mayor Competitividad</h3>
+        <p class="benefit-card__desc">Costos unitarios de producción más bajos y operaciones optimizadas se traducen directamente en un mejor posicionamiento en el mercado.</p>
+      </div>
+
+      <div class="benefit-card reveal reveal-delay-3">
+        <span class="benefit-card__num">03</span>
+        <div class="benefit-card__icon">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <h3 class="benefit-card__title">Cumplimiento Normativo</h3>
+        <p class="benefit-card__desc">Reducción del riesgo de sanciones mediante la gestión proactiva de requerimientos legales y regulatorios nacionales e internacionales.</p>
+      </div>
+
+      <div class="benefit-card reveal reveal-delay-1">
+        <span class="benefit-card__num">04</span>
+        <div class="benefit-card__icon">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <h3 class="benefit-card__title">Mejora Continua</h3>
+        <p class="benefit-card__desc">Sistemas basados en principios ISO 50001 que garantizan una optimización sostenida — no un arreglo puntual, sino una trayectoria de mejora permanente.</p>
+      </div>
+
+      <div class="benefit-card reveal reveal-delay-2">
+        <span class="benefit-card__num">05</span>
+        <div class="benefit-card__icon">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <h3 class="benefit-card__title">Control Total del Consumo</h3>
+        <p class="benefit-card__desc">Visibilidad granular por área, línea y activo crítico — para que cada decisión esté respaldada por información técnica real.</p>
+      </div>
+
+      <div class="benefit-card reveal reveal-delay-3">
+        <span class="benefit-card__num">06</span>
+        <div class="benefit-card__icon">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <h3 class="benefit-card__title">Imagen Corporativa Responsable</h3>
+        <p class="benefit-card__desc">Demuestra tu compromiso con la sostenibilidad y el buen gobierno ante clientes, accionistas y la comunidad.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ========================================
+     SECTORS / EXPERIENCE
+======================================== -->
+<section class="section section--off" id="sectors">
+  <div class="container">
+    <div class="sectors__inner">
+      <div>
+        <span class="label reveal">Nuestra Trayectoria</span>
+        <h2 class="reveal reveal-delay-1">Presencia en los sectores clave</h2>
+        <p class="reveal reveal-delay-2" style="margin-top: 14px; color: var(--gray-500);">Una década de proyectos en las industrias más estratégicas del Ecuador — con un historial verificable de resultados tangibles.</p>
+
+        <div class="sectors__list">
+          <div class="sector-item reveal reveal-delay-1">
+            <div class="sector-item__left">
+              <span class="sector-item__dot"></span>
+              <span class="sector-item__name">Industria</span>
+            </div>
+            <span class="sector-item__detail">Implementación ISO 9001 e ISO 50001 en más de 20 empresas</span>
+          </div>
+          <div class="sector-item reveal reveal-delay-2">
+            <div class="sector-item__left">
+              <span class="sector-item__dot"></span>
+              <span class="sector-item__name">Sector Agua</span>
+            </div>
+            <span class="sector-item__detail">Planes de mejora y estudios tarifarios en 5+ empresas públicas</span>
+          </div>
+          <div class="sector-item reveal reveal-delay-3">
+            <div class="sector-item__left">
+              <span class="sector-item__dot"></span>
+              <span class="sector-item__name">Electricidad</span>
+            </div>
+            <span class="sector-item__detail">Supervisión de proyectos BEDE y auditorías de calidad</span>
+          </div>
+          <div class="sector-item reveal reveal-delay-4">
+            <div class="sector-item__left">
+              <span class="sector-item__dot"></span>
+              <span class="sector-item__name">Laboratorios</span>
+            </div>
+            <span class="sector-item__detail">Acreditación de 5 laboratorios; auditorías en 20+ instalaciones</span>
+          </div>
+          <div class="sector-item reveal reveal-delay-5">
+            <div class="sector-item__left">
+              <span class="sector-item__dot"></span>
+              <span class="sector-item__name">Gobierno y Municipal</span>
+            </div>
+            <span class="sector-item__detail">Asesoría en Buen Gobierno — AME Ecuador</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sectors__right reveal reveal-delay-2">
+        <div class="sectors__highlight">
+          <span class="label label--white">Trayectoria</span>
+          <h3>Una década de transformación medible</h3>
+          <p>Desde 2014, LeanConsult ha construido un portafolio de proyectos exitosos en manufactura, servicios públicos, administración pública y servicios técnicos — generando certificación, optimización y valor estratégico a cada cliente.</p>
+
+          <div class="sectors__numbers">
+            <div class="sectors__num-item">
+              <span class="sectors__num-val">20+</span>
+              <span class="sectors__num-label">Implementaciones ISO</span>
+            </div>
+            <div class="sectors__num-item">
+              <span class="sectors__num-val">5+</span>
+              <span class="sectors__num-label">Laboratorios acreditados</span>
+            </div>
+            <div class="sectors__num-item">
+              <span class="sectors__num-val">5+</span>
+              <span class="sectors__num-label">Sectores atendidos</span>
+            </div>
+            <div class="sectors__num-item">
+              <span class="sectors__num-val">10+</span>
+              <span class="sectors__num-label">Años de experiencia</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========================================
+     TESTIMONIALS / RESULTS SECTION
+======================================== -->
+<section class="testimonials" id="testimonials">
+  <div class="container">
+    <div class="testimonials__header reveal">
+      <span class="label">Resultados Comprobados</span>
+      <h2>Impacto en cifras</h2>
+      <p class="testimonials__subtitle">Más de una década entregando resultados medibles a organizaciones ecuatorianas de manufactura, servicios públicos e industria.</p>
+    </div>
+
+    <!-- Métricas clave al estilo consulting firm -->
+    <div class="testimonials__metrics reveal reveal-delay-1">
+      <div class="metric-item">
+        <span class="metric-item__num">20+</span>
+        <span class="metric-item__label">Empresas certificadas en ISO</span>
+      </div>
+      <div class="metric-item">
+        <span class="metric-item__num">5</span>
+        <span class="metric-item__label">Laboratorios acreditados</span>
+      </div>
+      <div class="metric-item">
+        <span class="metric-item__num">15%</span>
+        <span class="metric-item__label">Ahorro energético promedio</span>
+      </div>
+      <div class="metric-item">
+        <span class="metric-item__num">10+</span>
+        <span class="metric-item__label">Años de trayectoria</span>
+      </div>
+    </div>
+
+    <!-- Tarjetas de resultados por sector -->
+    <div class="testimonials__grid">
+
+      <div class="result-card reveal reveal-delay-1">
+        <span class="result-card__sector">Industria Manufacturera</span>
+        <div class="result-card__result">Certificación<br>ISO 9001</div>
+        <div class="result-card__company">Empresa de manufactura — Ecuador</div>
+        <p class="result-card__desc">Acompañamiento completo desde el diagnóstico de brechas hasta la auditoría de certificación, logrando el primer certificado ISO 9001 en 9 meses.</p>
+        <span class="result-card__tag">Sistemas de Gestión</span>
+      </div>
+
+      <div class="result-card reveal reveal-delay-2">
+        <span class="result-card__sector">Sector Energético</span>
+        <div class="result-card__result">−18%<br>Costo eléctrico</div>
+        <div class="result-card__company">Planta industrial — Sierra ecuatoriana</div>
+        <p class="result-card__desc">Reducción del 18% en la factura eléctrica anual mediante auditoría energética, corrección de errores de facturación e implementación de controles de consumo.</p>
+        <span class="result-card__tag">Lean Energy</span>
+      </div>
+
+      <div class="result-card reveal reveal-delay-3">
+        <span class="result-card__sector">Sector Agua</span>
+        <div class="result-card__result">5 Empresas<br>mejoradas</div>
+        <div class="result-card__company">Empresas públicas de agua potable</div>
+        <p class="result-card__desc">Diseño e implementación de planes de mejora continua y estudios tarifarios para empresas de agua potable y alcantarillado en Ecuador.</p>
+        <span class="result-card__tag">Consultoría Pública</span>
+      </div>
+
+      <div class="result-card reveal reveal-delay-1">
+        <span class="result-card__sector">Laboratorios</span>
+        <div class="result-card__result">5 Labs<br>acreditados</div>
+        <div class="result-card__company">Laboratorios técnicos — nivel nacional</div>
+        <p class="result-card__desc">Proceso integral de acreditación bajo norma ISO 17025 ante el SAE, incluyendo documentación, formación del personal y auditorías previas a la certificación.</p>
+        <span class="result-card__tag">ISO 17025 — SAE</span>
+      </div>
+
+      <div class="result-card reveal reveal-delay-2">
+        <span class="result-card__sector">Gobierno Municipal</span>
+        <div class="result-card__result">Buen<br>Gobierno AME</div>
+        <div class="result-card__company">Asociación de Municipalidades — AME Ecuador</div>
+        <p class="result-card__desc">Asesoría técnica en gestión pública, modernización de procesos municipales y capacitación en gobernanza bajo estándares nacionales e internacionales.</p>
+        <span class="result-card__tag">Sector Público</span>
+      </div>
+
+      <div class="result-card reveal reveal-delay-3">
+        <span class="result-card__sector">Seguridad Alimentaria</span>
+        <div class="result-card__result">ISO 22000<br>Implementado</div>
+        <div class="result-card__company">Empresa agroalimentaria — Ecuador</div>
+        <p class="result-card__desc">Implementación del sistema de gestión de inocuidad alimentaria bajo ISO 22000 con capacitación del equipo HACCP y documentación completa del sistema.</p>
+        <span class="result-card__tag">Inocuidad Alimentaria</span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ========================================
+     CTA / CONTACT INFO
+======================================== -->
+<section class="cta" id="contact">
+  <div class="cta__bg-circle"></div>
+  <div class="cta__bg-circle-2"></div>
+  <div class="container">
+    <div class="cta__inner">
+      <div class="cta__content reveal">
+        <span class="cta__label">Construyamos algo juntos</span>
+        <h2 class="cta__headline">¿Listo para transformar tu organización?</h2>
+        <p class="cta__sub">
+          Cambia la forma en que tu empresa gestiona su desempeño. Reduce costos, planifica con visión y toma decisiones respaldadas por experiencia técnica real.
+        </p>
+      </div>
+
+      <div class="cta__contacts reveal reveal-delay-2">
+        <a href="mailto:gerencia@leanconsult.com.ec" class="contact-item">
+          <div class="contact-item__icon">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div>
+            <span class="contact-item__label">Correo electrónico</span>
+            <span class="contact-item__value">gerencia@leanconsult.com.ec</span>
+          </div>
+        </a>
+
+        <a href="tel:+593962678698" class="contact-item">
+          <div class="contact-item__icon">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div>
+            <span class="contact-item__label">WhatsApp / Teléfono</span>
+            <span class="contact-item__value">0962 678 698</span>
+          </div>
+        </a>
+
+        <a href="https://www.leanconsult.com.ec" target="_blank" rel="noopener" class="contact-item">
+          <div class="contact-item__icon">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div>
+            <span class="contact-item__label">Sitio web</span>
+            <span class="contact-item__value">www.leanconsult.com.ec</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========================================
+     CONTACT FORM SECTION — "Contáctanos"
+======================================== -->
+<section class="contact-form-section" id="contacto">
+  <div class="container">
+    <div class="contact-form__inner">
+
+      <!-- Información lateral izquierda -->
+      <div>
+        <span class="label reveal">Escríbenos</span>
+        <h2 class="reveal reveal-delay-1">Contáctanos</h2>
+        <p class="reveal reveal-delay-2">Cuéntanos sobre tu organización y los desafíos que enfrentas. Nuestro equipo te responderá en menos de 24 horas hábiles.</p>
+
+        <div class="contact-form__info-items reveal reveal-delay-3">
+          <div class="contact-form__info-item">
+            <div class="contact-form__info-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+            </div>
+            gerencia@leanconsult.com.ec
+          </div>
+          <div class="contact-form__info-item">
+            <div class="contact-form__info-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+            </div>
+            0962 678 698
+          </div>
+          <div class="contact-form__info-item">
+            <div class="contact-form__info-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+            </div>
+            Quito, Ecuador
+          </div>
+        </div>
+      </div>
+
+      <!-- Formulario -->
+      <div class="reveal reveal-delay-2">
+        <div class="form" id="contactForm">
+          <div class="form__grid">
+
+            <div class="form__group" id="group-nombre">
+              <label class="form__label" for="nombre">Nombre <span class="required">*</span></label>
+              <input class="form__input" type="text" id="nombre" name="nombre" placeholder="Tu nombre" autocomplete="given-name">
+              <span class="form__error">Por favor ingresa tu nombre.</span>
+            </div>
+
+            <div class="form__group" id="group-apellido">
+              <label class="form__label" for="apellido">Apellido <span class="required">*</span></label>
+              <input class="form__input" type="text" id="apellido" name="apellido" placeholder="Tu apellido" autocomplete="family-name">
+              <span class="form__error">Por favor ingresa tu apellido.</span>
+            </div>
+
+            <div class="form__group" id="group-cargo">
+              <label class="form__label" for="cargo">Cargo</label>
+              <input class="form__input" type="text" id="cargo" name="cargo" placeholder="Ej: Gerente de Calidad" autocomplete="organization-title">
+            </div>
+
+            <div class="form__group" id="group-empresa">
+              <label class="form__label" for="empresa">Empresa <span class="required">*</span></label>
+              <input class="form__input" type="text" id="empresa" name="empresa" placeholder="Nombre de tu empresa" autocomplete="organization">
+              <span class="form__error">Por favor ingresa el nombre de tu empresa.</span>
+            </div>
+
+            <div class="form__group" id="group-email">
+              <label class="form__label" for="email">Correo electrónico <span class="required">*</span></label>
+              <input class="form__input" type="email" id="email" name="email" placeholder="correo@empresa.com" autocomplete="email">
+              <span class="form__error">Por favor ingresa un correo electrónico válido.</span>
+            </div>
+
+            <div class="form__group" id="group-telefono">
+              <label class="form__label" for="telefono">Número de teléfono</label>
+              <input class="form__input" type="tel" id="telefono" name="telefono" placeholder="+593 99 000 0000" autocomplete="tel">
+            </div>
+
+            <div class="form__group form__group--full" id="group-mensaje">
+              <label class="form__label" for="mensaje">Mensaje <span class="required">*</span></label>
+              <textarea class="form__textarea" id="mensaje" name="mensaje" placeholder="Cuéntanos brevemente sobre tu empresa y en qué podemos ayudarte…"></textarea>
+              <span class="form__error">Por favor escribe tu mensaje.</span>
+            </div>
+
+          </div>
+
+          <div class="form__submit">
+            <span class="form__success" id="formSuccess">✓ Mensaje enviado. Te contactaremos pronto.</span>
+            <button class="btn--form" type="button" id="submitBtn" onclick="submitForm()">
+              Enviar mensaje
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ========================================
+     FOOTER
+======================================== -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer__inner">
+      <div class="footer__brand">
+        <!-- Logo imagen en el footer (blanco sobre oscuro) -->
+        <img
+          src="1776169308226_image.png"
+          alt="LeanConsult"
+          class="footer__logo-img"
+          onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+        />
+        <!-- Fallback texto -->
+        <div class="footer__logo-text" style="display:none;">Lean<span>Consult</span></div>
+        <div class="footer__tagline">+ Valor Agregado</div>
+        <p class="footer__desc">Consultoría integral e ingeniería con soluciones medibles desde 2014. Quito, Ecuador.</p>
+      </div>
+
+      <div>
+        <div class="footer__col-title">Servicios</div>
+        <ul class="footer__links">
+          <li><a href="#services">Certificaciones ISO</a></li>
+          <li><a href="#services">Gestión Lean</a></li>
+          <li><a href="#services">Optimización de Procesos</a></li>
+          <li><a href="#services">Gestión de Riesgos</a></li>
+          <li><a href="#services">Seguridad Alimentaria</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="footer__col-title">Lean Energy</div>
+        <ul class="footer__links">
+          <li><a href="#energy">ISO 50001</a></li>
+          <li><a href="#energy">Reducción de Costos</a></li>
+          <li><a href="#energy">Auditoría de Facturación</a></li>
+          <li><a href="#energy">Monitoreo Energético</a></li>
+          <li><a href="#energy">Nuevos Proyectos</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="footer__col-title">Empresa</div>
+        <ul class="footer__links">
+          <li><a href="#about">Nosotros</a></li>
+          <li><a href="#sectors">Experiencia</a></li>
+          <li><a href="#testimonials">Resultados</a></li>
+          <li><a href="#contacto">Contáctanos</a></li>
+          <li><a href="mailto:gerencia@leanconsult.com.ec">gerencia@leanconsult.com.ec</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer__bottom">
+      <span class="footer__copy">© 2024 <span>LeanConsult</span> Cía. Ltda. — Ecuador</span>
+      <span class="footer__copy">Consultoría Integral &amp; Ingeniería</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ========================================
+     JAVASCRIPT
+======================================== -->
+<script>
+/* --- Nav scroll behavior --- */
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 40);
+});
+
+/* --- Mobile menu toggle --- */
+const toggle = document.getElementById('navToggle');
+const navLinksEl = document.getElementById('navLinks');
+let menuOpen = false;
+
+toggle.addEventListener('click', () => {
+  menuOpen = !menuOpen;
+  navLinksEl.classList.toggle('open', menuOpen);
+  const spans = toggle.querySelectorAll('span');
+  if (menuOpen) {
+    spans[0].style.transform = 'translateY(7px) rotate(45deg)';
+    spans[1].style.opacity = '0';
+    spans[2].style.transform = 'translateY(-7px) rotate(-45deg)';
+  } else {
+    spans.forEach(s => { s.style.transform = ''; s.style.opacity = ''; });
+  }
+});
+
+/* Close menu on link click */
+navLinksEl.querySelectorAll('a').forEach(a => {
+  a.addEventListener('click', () => {
+    menuOpen = false;
+    navLinksEl.classList.remove('open');
+    toggle.querySelectorAll('span').forEach(s => { s.style.transform = ''; s.style.opacity = ''; });
+  });
+});
+
+/* --- Scroll reveal (enhanced) --- */
+const revealEls = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+revealEls.forEach(el => observer.observe(el));
+
+/* --- Active nav link on scroll --- */
+const sections = document.querySelectorAll('section[id]');
+const navLinks2 = document.querySelectorAll('.nav__links a');
+
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(section => {
+    const sectionTop = section.offsetTop - 100;
+    if (window.scrollY >= sectionTop) current = section.getAttribute('id');
+  });
+  navLinks2.forEach(link => {
+    link.classList.remove('active');
+    if (link.getAttribute('href') === '#' + current) link.classList.add('active');
+  });
+});
+
+/* --- Subtle hero image parallax on scroll --- */
+const heroBgImage = document.querySelector('.hero__bg-image');
+if (heroBgImage) {
+  window.addEventListener('scroll', () => {
+    const scrollY = window.scrollY;
+    if (scrollY < window.innerHeight) {
+      heroBgImage.style.transform = `scale(1.05) translateY(${scrollY * 0.18}px)`;
+    }
+  }, { passive: true });
+}
+
+/* --- Counter animation for metrics --- */
+function animateCounter(el, target, duration = 1800) {
+  const isPercent = target.toString().includes('%');
+  const isPlus = target.toString().includes('+');
+  const numTarget = parseInt(target);
+  let start = null;
+
+  const step = (timestamp) => {
+    if (!start) start = timestamp;
+    const progress = Math.min((timestamp - start) / duration, 1);
+    const eased = 1 - Math.pow(1 - progress, 3); // ease-out cubic
+    const current = Math.floor(eased * numTarget);
+    el.textContent = current + (isPercent ? '%' : isPlus ? '+' : '');
+    if (progress < 1) requestAnimationFrame(step);
+    else el.textContent = target;
+  };
+  requestAnimationFrame(step);
+}
+
+/* Trigger counters when metrics section enters view */
+const metricsSection = document.querySelector('.testimonials__metrics');
+if (metricsSection) {
+  let countersTriggered = false;
+  const metricsObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting && !countersTriggered) {
+        countersTriggered = true;
+        document.querySelectorAll('.metric-item__num').forEach(el => {
+          animateCounter(el, el.textContent.trim());
+        });
+        // Also animate sector numbers
+        document.querySelectorAll('.sectors__num-val').forEach(el => {
+          animateCounter(el, el.textContent.trim(), 1400);
+        });
+        document.querySelectorAll('.hero__stat-num').forEach(el => {
+          animateCounter(el, el.textContent.trim(), 1200);
+        });
+      }
+    });
+  }, { threshold: 0.3 });
+  metricsObserver.observe(metricsSection);
+}
+
+/* --- Contact Form Validation --- */
+function submitForm() {
+  const fields = [
+    { id: 'nombre',  group: 'group-nombre',  validate: v => v.trim().length >= 2 },
+    { id: 'apellido', group: 'group-apellido', validate: v => v.trim().length >= 2 },
+    { id: 'empresa', group: 'group-empresa',  validate: v => v.trim().length >= 2 },
+    { id: 'email',   group: 'group-email',    validate: v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()) },
+    { id: 'mensaje', group: 'group-mensaje',  validate: v => v.trim().length >= 10 },
+  ];
+
+  let valid = true;
+
+  fields.forEach(field => {
+    const input = document.getElementById(field.id);
+    const group = document.getElementById(field.group);
+    const isValid = field.validate(input.value);
+
+    if (!isValid) {
+      group.classList.add('has-error');
+      input.classList.add('error');
+      valid = false;
+    } else {
+      group.classList.remove('has-error');
+      input.classList.remove('error');
+    }
+  });
+
+  if (valid) {
+    /* Simulate form submission — replace with real endpoint */
+    const btn = document.getElementById('submitBtn');
+    btn.textContent = 'Enviando…';
+    btn.disabled = true;
+    btn.style.opacity = '0.7';
+
+    setTimeout(() => {
+      document.getElementById('formSuccess').style.display = 'block';
+      btn.textContent = 'Mensaje enviado ✓';
+      btn.style.background = '#276749';
+      /* Reset form after 5s */
+      setTimeout(() => {
+        document.getElementById('contactForm').querySelectorAll('input, textarea').forEach(el => el.value = '');
+        btn.disabled = false;
+        btn.style.opacity = '';
+        btn.style.background = '';
+        btn.innerHTML = 'Enviar mensaje <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>';
+        document.getElementById('formSuccess').style.display = 'none';
+      }, 5000);
+    }, 1200);
+  }
+}
+
+/* Clear error on input */
+document.querySelectorAll('.form__input, .form__textarea').forEach(input => {
+  input.addEventListener('input', () => {
+    const groupId = 'group-' + input.id;
+    const group = document.getElementById(groupId);
+    if (group) {
+      group.classList.remove('has-error');
+      input.classList.remove('error');
+    }
+  });
+});
+
+/* --- Micro-interaction: smooth hover sound on CTA (visual feedback only) --- */
+document.querySelectorAll('.btn--primary, .nav__cta').forEach(btn => {
+  btn.addEventListener('mouseenter', () => {
+    btn.style.letterSpacing = '0.06em';
+  });
+  btn.addEventListener('mouseleave', () => {
+    btn.style.letterSpacing = '';
+  });
+});
+</script>
+</body>
+</html>
